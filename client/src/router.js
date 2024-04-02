@@ -1,22 +1,44 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Home from "./views/Home.vue";
+import { createRouter, createWebHistory } from "vue-router";
+import LoginView from "@/views/LoginView.vue";
+import InicioView from "@/views/InicioView.vue";
+import ProductoView from "@/views/ProductoView.vue";
+import ProveedoresView from "@/views/ProveedoresView.vue";
+import EnviosView from "@/views/EnviosView.vue";
 
-Vue.use(Router);
+const routes = [
+  {
+    path: "/",
+    name: "home",
+    component: LoginView,
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: InicioView,
+  },
 
-export default new Router({
-  mode: "history",
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: "/",
-      name: "home",
-      component: Home
-    },
-    {
-      path: "/about",
-      name: "about",
-      component: () => import("./views/About.vue")
-    }
-  ]
+  {
+    path: "/producto",
+    name: "producto",
+    component: ProductoView,
+  },
+
+  {
+    path: "/proveedores",
+    name: "proveedores",
+    component: ProveedoresView,
+  },
+
+  {
+    path: "/envios",
+    name: "envios",
+    component: EnviosView,
+  },
+];
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
 });
+
+export default router;
