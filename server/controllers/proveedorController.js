@@ -3,14 +3,20 @@ const db = require('../config/database');
 // Función para obtener todos los proveedores
 exports.getProveedores = async (req, res) => {
   try {
-    // Realizamos la consulta a la base de datos para obtener todos los proveedores
-    const proveedores = await db.query('SELECT * FROM proveedor');
-    res.json(proveedores);
+    const proveedoresQuery = 'SELECT * FROM proveedor';
+    db.query(proveedoresQuery, (err, result) => {
+      if (err) {
+        res.status(500).send({ error: 'Error al obtener los proveedores' });
+        return;
+      }
+      res.send(result);
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al obtener los proveedores' });
+    console.error('Error al ejecutar la consulta de proveedores:', error);
+    res.status(500).send({ error: 'Error al obtener los proveedores' });
   }
 };
+
 
 // Función para obtener un proveedor por su ID
 exports.getProveedorById = async (req, res) => {

@@ -9,8 +9,11 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "axios": "^1.6.8",
+    "bootstrap": "^5.3.3",
     "core-js": "^3.18.3",
     "vue": "^3.2.13",
+    "vue-flex": "^2.1.2",
     "vue-router": "^4.0.11",
     "vuex": "^4.0.5"
   },

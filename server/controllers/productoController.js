@@ -3,14 +3,22 @@ const db = require('../config/database');
 // Función para obtener todos los productos
 exports.getProductos = async (req, res) => {
   try {
-    // Aquí realizamos la consulta a la base de datos para obtener todos los productos
-    const productos = await db.query('SELECT * FROM producto');
-    res.json(productos);
+    const productosQuery = 'SELECT * FROM producto';
+    db.query(productosQuery, (err, result) => {
+      if (err) {
+        res.status(500).send({ error: 'Error al obtener los productos' });
+        return;
+      }
+      res.send(result);
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al obtener los productos' });
+    console.error('Error al ejecutar la consulta de productos:', error);
+    res.status(500).send({ error: 'Error al obtener los productos' });
   }
 };
+
+
+
 
 // Función para obtener un producto por su ID
 exports.getProductoById = async (req, res) => {

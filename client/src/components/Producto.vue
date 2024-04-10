@@ -66,59 +66,41 @@
 
 <script>
 import axios from "axios";
+import { ref, onMounted } from "vue";
 
 export default {
-  data() {
-    return {
-      mostrarModal: false,
-      producto: {
-        nombre: "",
-        descripcion: "",
-        categoria: "",
-        stock: 0,
-        precio: 0,
-      },
-      productos: [], // Almacena la lista de productos
-    };
+  props: {
+    msg2: String,
   },
-  methods: {
-    agregarProducto() {
-      axios
-        .post("/api/producto", this.producto)
-        .then(() => {
-          this.mostrarModal = false;
-          this.producto = {
-            nombre: "",
-            descripcion: "",
-            categoria: "",
-            stock: 0,
-            precio: 0,
-          }; // Resetea los valores del formulario
-          this.obtenerProductos(); // Actualiza la lista de productos
-        })
-        .catch((err) => {
-          console.error(err);
-          // Maneja el error como consideres apropiado
-        });
-    },
-    obtenerProductos() {
-      axios
-        .get("/api/producto")
-        .then((res) => {
-          this.productos = res.data; // Actualiza la lista de productos
-        })
-        .catch((err) => {
-          console.error(err);
-          // Maneja el error como consideres apropiado
-        });
-    },
-  },
+  setup() {
+    const mostrarModal = ref(false);
+    const productos = ref([]);
+    const producto = ref({
+      nombre: "",
+      descripcion: "",
+      categoria: "",
+      stock: 0,
+      precio: 0,
+    });
 
-  created() {
-    this.obtenerProductos(); // Obtiene la lista de productos cuando se crea el componente
+    const getProductos = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:3000/api/productos");
+        productos.value = data;
+      } catch (error) {
+        console.error("Error al obtener productos:", error);
+      }
+    };
+
+    onMounted(() => {
+      getProductos();
+    });
+
+    return { mostrarModal, productos, producto, getProductos };
   },
 };
 </script>
+/
 
 <style scoped>
 table {

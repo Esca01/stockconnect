@@ -1,33 +1,29 @@
-// Importando los módulos requeridos
-const cors = require('cors');
 const express = require('express');
+const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
-
-// Cargando las variables de entorno desde el archivo .env
-dotenv.config();
-
-// Configurando el puerto
-const port = process.env.PORT || 3000;
-
 const app = express();
 
-// Configurando middlewares
+// Importa el enrutador de la API
+const apiRouter = require('./routes/api');
+
+// Configura las variables de entorno
+dotenv.config();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Estableciendo el motor de vista y la carpeta estática
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-app.set('views', path.join(__dirname, 'views'));
+// Rutas estáticas
 app.use(express.static(path.join(__dirname, 'views')));
 
-// Definiendo middleware de ruta
-app.use('/api', require('./routes/api'));
+// Rutas de la API
+app.use('/api', apiRouter);
 
-// Escuchando en el puerto
-app.listen(port, () => {
-  console.log(`Servidor en funcionamiento en http://localhost:${port}/api`);
+// Puerto
+const PORT = 3000;
+
+// Inicia el servidor
+app.listen(PORT, () => {
+  console.log(`Servidor en ejecución en el puerto ${PORT}`);
 });
-
-module.exports = app;

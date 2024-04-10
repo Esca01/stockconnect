@@ -3,14 +3,20 @@ const db = require('../config/database');
 // Función para obtener todos los usuarios
 exports.getUsuarios = async (req, res) => {
   try {
-    // Aquí realizamos la consulta a la base de datos para obtener todos los usuarios
-    const usuarios = await db.query('SELECT * FROM usuario');
-    res.json(usuarios);
+    const usuariosQuery = 'SELECT * FROM usuario';
+    db.query(usuariosQuery, (err, result) => {
+      if (err) {
+        res.status(500).send({ error: 'Error al obtener los usuarios' });
+        return;
+      }
+      res.send(result);
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al obtener los usuarios' });
+    console.error('Error al ejecutar la consulta de usuarios:', error);
+    res.status(500).send({ error: 'Error al obtener los usuarios' });
   }
 };
+
 
 // Función para obtener un usuario por su ID
 exports.getUsuarioById = async (req, res) => {
